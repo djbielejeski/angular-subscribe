@@ -1,0 +1,8 @@
+ul.navigation{
+    padding: 0;
+}
+
+ul.navigation > li{
+    display: inline-block;
+    margin-right: 8px;
+}
