@@ -13,7 +13,7 @@ import { ServerDataModel } from '@app/models';
 })
 export class Page1Component extends BaseComponent implements OnInit, OnDestroy {
     // Duplicated code every time you have an infinite subscription.
-    private badWayToUnsubscribe_Subscription = new Subscription();
+    private subscriptions = new Subscription();
 
     constructor(private router: Router,
                 private httpHelperService: HttpHelperService) {
@@ -36,18 +36,19 @@ export class Page1Component extends BaseComponent implements OnInit, OnDestroy {
         });
 
         // The duplicated code way of unsubscribing from an infinite subscription
-        this.badWayToUnsubscribe_Subscription = this.router.events.subscribe((event) => {
+        const badWayToUnsubscribe_Subscription = this.router.events.subscribe((event) => {
             if (event instanceof NavigationStart) {
-                console.log('Page 1: Router.Events.Subscribe (Infinite) - With Duplicated Unsubscribe: ', event);
+                console.log('Page 1: Router.Events.Subscribe (Infinite) - With Extra Unsubscribe Step: ', event);
             }
         });
+
+        this.subscriptions.add(badWayToUnsubscribe_Subscription);
     }
 
     ngOnDestroy() {
         super.ngOnDestroy();
 
-        // Duplicated code every time you have an infinite subscription.
-        this.badWayToUnsubscribe_Subscription.unsubscribe();
+        this.subscriptions.unsubscribe();
     }
 
     buttonClick() {
